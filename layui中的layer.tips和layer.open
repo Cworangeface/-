@@ -1,0 +1,54 @@
+方法添加在layui的 table.render里的done方法里
+hoverOpenImg();//显示大图
+   function hoverOpenImg() {
+            
+                    var img_show = null; // tips提示
+            
+                    $('td img').hover(function () {
+                
+                         //alert($(this).attr('src'));
+                
+                        var img = "<img class='img_msg' src='" + $(this).attr('src') + "' style='style='max-width:500px;max-height:260px;'/>";
+//放大图片大小 
+                        img_show = layer.tips(img, this, {
+
+                              tips: [2, 'rgba(1,1,1,0.5)']
+ //2是在右显示 配一个透明度为0.5的背景框                   
+                              , area: ['500px']
+  
+                              });
+                             }, function () {
+
+                                 layer.close(img_show);
+                               });
+          
+                              $('td img').attr('style', 'max-width:100px');
+      //原始图片大小  
+                           }
+1.由于使用tips显示大图会有一个默认框，将area和放大图片设为一样大时能消失。所以后期area改成功了400px。
+2.由于tips在layer规定了显示位置，导致有些图片只能显示一半故后期改为使用layer.open方法。代码如下：
+
+  function hoverOpenImg() {
+            var img_show = null; // tips提示
+            $('td img').hover(function () {
+                //alert($(this).attr('src'));
+                var img = "<img class='img_msg' src='" + $(this).attr('src') + "' style='max-width:400px;max-height:260px;'/>";
+                img_show = layer.open({
+                    type: 1,                       //消息框
+                    closeBtn: 0,                  //关闭按钮设为无
+                    shade: false,                 //遮罩不显示 
+                    title: false,                //不显示标题
+                    shadeClose: false,          //是否点击遮罩关闭
+                    area: ['auto', 'auto'],     //自适应
+                    offset: ['200px', '410px'], //偏移显示位置
+                    scrollbar: false,           //是否允许浏览器出现滚动条
+                    content: img               //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+                    //cancel: function () {    
+	            //layer.msg('图片查看结束！', { time: 5000, icon: 6 });    
+	        //}    
+                })
+                
+            }, function () {
+                layer.close(img_show);
+            });
+            $('td img').attr('style', 'max-width:80px');
