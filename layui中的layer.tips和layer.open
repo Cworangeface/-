@@ -51,4 +51,4 @@ hoverOpenImg();//显示大图
             }, function () {
                 layer.close(img_show);
             });
-            $('td img').attr('style', 'max-width:80px');
+            $('td img').attr('style', 'max-width:80px');   //缩略图最大宽度
