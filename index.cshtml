@@ -1,0 +1,256 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="full-screen" content="yes">
+    <meta name="x5-fullscreen" content="true">
+    <title>广告管理</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <link rel="icon" href="">
+    <link rel="stylesheet" type="text/css" href="~/Script/layui/css/layui.css?v=@ViewBag.StampDate">
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
+        /*表格容器*/
+        .body-con {
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            padding: 15px;
+            background-color: white;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+            /*按钮容器*/
+            .body-con .btn-con {
+                width: 100%;
+                height: 30px;
+                box-sizing: border-box;
+                display: flex;
+                justify-content: space-between;
+            }
+
+
+                .body-con .btn-con .left, .body-con .btn-con .right {
+                    width: auto;
+                    height: 30px;
+                    box-sizing: border-box;
+                }
+
+                    .body-con .btn-con .left .layui-form-item {
+                        margin-bottom: 0;
+                    }
+
+                    /*筛选容器*/
+                    .body-con .btn-con .left form {
+                        display: flex;
+                    }
+
+                        .body-con .btn-con .left form .city-con {
+                            margin-right: 10px;
+                        }
+
+                            .body-con .btn-con .left form .city-con .layui-input {
+                                width: 120px;
+                                height: 30px;
+                            }
+
+                        .body-con .btn-con .left form .group-con {
+                            margin-right: 10px;
+                        }
+
+                            .body-con .btn-con .left form .group-con .layui-input {
+                                width: 180px;
+                                height: 30px;
+                            }
+
+                        .body-con .btn-con .left form .layui-btn {
+                            height: 30px;
+                            line-height: 30px;
+                        }
+
+                        .body-con .btn-con .left form .project-con {
+                            margin-right: 10px;
+                        }
+
+                            .body-con .btn-con .left form .project-con .layui-input {
+                                width: 180px;
+                                height: 30px;
+                            }
+
+                        .body-con .btn-con .left form .layui-btn {
+                            height: 30px;
+                            line-height: 30px;
+                        }
+
+                        .body-con .btn-con .left form .layui-form-select dl {
+                            top: 35px;
+                            max-height: 250px;
+                        }
+
+                            .body-con .btn-con .left form .layui-form-select dl dt {
+                                line-height: 30px;
+                            }
+
+        /*新建，搜索，容器*/
+        #projectAdmin-create-con, #projectAdmin-search-con, #change-pass-con {
+            display: none;
+        }
+
+
+            /*修改input默认宽度*/
+            #projectAdmin-search-con .layui-input-inline, #projectAdmin-create-con .layui-input-inline {
+                width: 250px;
+            }
+
+            /*修改select默认高度*/
+            #projectAdmin-search-con .layui-form-select dl, #projectAdmin-create-con .layui-form-select dl {
+                max-height: 152px;
+            }
+
+        /*表格容器*/
+        .body-con .table-con {
+            width: 100%;
+            height: calc(100% - 85px);
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        /*去除表格默认间距*/
+        .layui-form.layui-border-box.layui-table-view {
+            margin: 0;
+        }
+
+        /*分页容器*/
+        .body-con .page-con {
+            width: 100%;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        /*去除分页默认间距*/
+        .layui-box.layui-laypage.layui-laypage-default {
+            margin: 0;
+        }
+
+        /*重设密码容器*/
+        #change-pass-con {
+            width: auto;
+            height: auto;
+            padding: 30px 40px;
+        }
+
+            #change-pass-con label {
+                width: auto;
+                padding-left: 0;
+                padding-top: 0;
+            }
+
+        .layui-disabled {
+            color: #999 !important;
+        }
+
+        #projectAdmin-create-con .layui-form-select .layui-input {
+            background-color: #fff9d8;
+        }
+
+        .qrcodeAlert {
+            display: none;
+            padding: 10px;
+        }
+
+        #twoDimensionCodeMain img {
+            margin: 0 auto;
+            margin-top: 10px;
+        }
+        #showImg{
+            max-width:200px;
+            height:auto;
+            display:none;
+        }
+        .get-img{
+            width:100px;
+            height:80px;
+            display:block;
+        }
+        .layui-table-cell{
+            height:auto;
+        }
+        
+    </style>
+</head>
+<body>
+    <!--页面容器-->
+    <div class="body-con">
+        <!--按钮容器-->
+        <div class="btn-con" data-city="" data-group="" data-project="">
+            <div class="right">
+                <button type="button" class="create-btn layui-btn layui-btn-sm"><i class="layui-icon">&#xe61f;</i>新增广告</button>
+                @*<button type="button" class="search-btn layui-btn layui-btn-sm"><i class="layui-icon">&#xe615;</i>高级搜索</button>*@
+                @*<button type="button" class="reset-btn layui-btn layui-btn-sm"><i class="layui-icon">&#x1002;</i>表格重置</button>*@
+            </div>
+        </div>
+        <!--表格容器-->
+        <div class="table-con">
+            <table id="table-projectAdmin" lay-filter="table-projectAdmin"></table>
+        </div>
+        <!--分页容器-->
+        <div class="page-con">
+            <div id="page-projectAdmin"></div>
+        </div>
+    </div>
+
+    <!--新增容器-->
+    <div id="projectAdmin-create-con">
+        <form class="layui-form formSubmit" style="padding: 20px;" action="../../AdvertisingManager/UploadAD" enctype="multipart/form-data" method="post">
+            <div class="layui-form-item" style="width:0;height:0;display:none">
+                <input type="text" name="ProjectID" style="height:0;width:0;" class="layui-input">
+            </div>
+            <div class="layui-form-item" style="width:0;height:0;display:none">
+                <input type="text" name="ID" style="height:0;width:0;" class="layui-input">
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">上传图片</label>
+                <input name="UpImage" type="file" id="upload" lay-verify="required" autocomplete="off" style="margin-top:5px;">
+            </div>
+            <div class="layui-form-item" style="text-align:center;">
+                <img src="#" id="showImg" name="Url">
+            </div>
+            <div class="layui-form-item" style="text-align:center;">
+                <button type="button" class="layui-btn" lay-submit lay-filter="cityAdmin-add-submit">上传</button>
+            </div>
+        </form>
+    </div>
+    <script src="~/Script/qrcode.min.js"></script>
+    <script src="~/Script/jquery-1.9.1.min.js"></script>
+    <script src="~/Script/jquery.form.js"></script>
+    <script type="text/javascript" src="~/Script/layui/layui.all.js"></script>
+    <script type="text/javascript" src="~/Script/page/getPower.js?v=@ViewBag.StampDate"></script>
+    <script type="text/javascript" src="~/Script/page/AdvertisingManager.js?v=@ViewBag.StampDate"></script>
+
+    <!--表格操作栏-->
+    <script type="text/html" id="projectAdmin-toolbar">
+        <a class="layui-btn layui-btn-xs" lay-event="edit" style="letter-spacing: 1px;"><i class="layui-icon">&#xe642;</i>修改</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" style="letter-spacing: 1px;"><i class="layui-icon">&#xe640;</i>删除</a>
+    </script>
+</body>
+</html>
+
+
